@@ -1,13 +1,11 @@
 ﻿
 using Npoi_Library.Excel;
+using Npoi_Library.Excel.Configurations;
 using Npoi_Library.Excel.Styling;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Examples
 {
@@ -33,7 +31,7 @@ namespace Examples
                 new Model_1 { Prop_1 = 2, Prop_2 = "Test", Prop_3 = true, Prop_4 = DateTime.Now.AddDays(-1), Prop_5 = 0.73f }
             };
 
-            byte[] content = ExcelManager.GenerateExcel(data, new ExcelOptions 
+            byte[] content = ExcelManager.GenerateExcel(data, new ExcelOptions
             {
                 HeaderStyle = new HeaderStyle { IsBold = false },
                 BodyStyle = new BodyStyle { IsBordered = true }

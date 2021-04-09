@@ -14,7 +14,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace ItalWebConsulting.Infrastructure.Excel
+namespace Npoi_Library.Excel
 {
     public static class ExcelManager
     {
