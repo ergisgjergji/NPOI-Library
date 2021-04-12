@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Npoi_Library.Excel.Enums;
+using System;
+using System.Collections.Generic;
+using System.Reflection;
 
 namespace Npoi_Library.Excel.Helpers
 {
@@ -40,6 +43,25 @@ namespace Npoi_Library.Excel.Helpers
                 mul *= 26;
             }
             return res;
+        }
+
+        public static FieldType GetFieldType(Type type)
+        {
+            IList<Type> numberTypeList = new List<Type> { typeof(byte), typeof(sbyte), typeof(short), typeof(ushort), typeof(int), typeof(uint), typeof(long), typeof(ulong), typeof(float), typeof(double), typeof(decimal), typeof(byte?), typeof(sbyte?), typeof(short?), typeof(ushort?), typeof(int?), typeof(uint?), typeof(long?), typeof(ulong?), typeof(float?), typeof(double?), typeof(decimal?) };
+
+            if (type.Equals(typeof(string)) || type.Equals(typeof(char)) || type.Equals(typeof(char?)))
+                return FieldType.Text;
+
+            if (numberTypeList.Contains(type))
+                return FieldType.Numeric;
+
+            if (type.Equals(typeof(bool)) || type.Equals(typeof(bool?)))
+                return FieldType.Boolean;
+
+            if (type.Equals(typeof(DateTime)) || type.Equals(typeof(DateTime?)))
+                return FieldType.DateTime;
+
+            return FieldType.Other;
         }
     }
 }

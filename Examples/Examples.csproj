@@ -103,8 +103,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model_1.cs" />
-    <Compile Include="Model_2.cs" />
+    <Compile Include="Models\TemplateModel.cs" />
+    <Compile Include="Models\Customer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

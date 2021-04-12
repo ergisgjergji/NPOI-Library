@@ -1,4 +1,5 @@
 ﻿
+using Examples.Models;
 using Npoi_Library.Excel;
 using Npoi_Library.Excel.Configurations;
 using Npoi_Library.Excel.Styling;
@@ -13,9 +14,10 @@ namespace Examples
     {
         static void Main(string[] args)
         {
-            Test1();
-            Test2();
-            Test3();
+            //Test1();
+            //Test2();
+            //Test3();
+            Test_Read();
 
             Console.WriteLine("Tests completed successfully!");
             Console.ReadLine();
@@ -23,12 +25,12 @@ namespace Examples
 
         private static void Test1()
         {
-            string storeLocation = @"C:\Users\ergis gjergji\Desktop\Test1.xls";
+            string storeLocation = @"C:\Users\ergis\Desktop\Test1.xls";
 
-            List<Model_1> data = new List<Model_1>()
+            List<Customer> data = new List<Customer>()
             {
-                new Model_1 { Prop_1 = 1, Prop_2 = "Test", Prop_3 = true, Prop_4 = DateTime.Now, Prop_5 = 1.32f },
-                new Model_1 { Prop_1 = 2, Prop_2 = "Test", Prop_3 = true, Prop_4 = DateTime.Now.AddDays(-1), Prop_5 = 0.73f }
+                new Customer { Id = 1, Name = "Test", Salary = 750d, BirthDate = DateTime.Now.AddYears(-18), IsActive = true },
+                new Customer { Id = 2, Name = "Test", Salary = 800f, BirthDate = DateTime.Now.AddYears(-20), IsActive = false }
             };
 
             byte[] content = ExcelManager.GenerateExcel(data, new ExcelOptions
@@ -45,7 +47,7 @@ namespace Examples
 
         public static void Test2()
         {
-            string storeLocation = @"C:\Users\ergis gjergji\Desktop\Test2.xls";
+            string storeLocation = @"C:\Users\ergis\Desktop\Test2.xls";
 
             DataTable table = new DataTable("Test");
 
@@ -53,16 +55,19 @@ namespace Examples
             table.Columns.Add(col1);
             DataColumn col2 = new DataColumn("Name", typeof(string));
             table.Columns.Add(col2);
-            DataColumn col3 = new DataColumn("Birthdate", typeof(DateTime));
+            DataColumn col3 = new DataColumn("Salary", typeof(double));
             table.Columns.Add(col3);
-            DataColumn col4 = new DataColumn("Wage", typeof(float));
+            DataColumn col4 = new DataColumn("BirthDate", typeof(DateTime));
             table.Columns.Add(col4);
+            DataColumn col5 = new DataColumn("IsActive", typeof(bool));
+            table.Columns.Add(col5);
 
             DataRow row = table.NewRow();
             row["Id"] = 1;
-            row["Name"] = "Test";
-            row["Birthdate"] = DateTime.Now.AddYears(-18);
-            row["Wage"] = 550f;
+            row["Name"] = "Test customer";
+            row["Salary"] = 750d;
+            row["BirthDate"] = DateTime.Now.AddYears(-20);
+            row["IsActive"] = true;
             table.Rows.Add(row);
 
             byte[] content = ExcelManager.GenerateExcel(table, null);
@@ -75,31 +80,31 @@ namespace Examples
 
         public static void Test3()
         {
-            string templateLocation = @"C:\Users\ergis gjergji\Desktop\template.xls";
+            string templateLocation = @"C:\Users\ergis\Desktop\template.xls";
             string templateSheetName = "Sheet1";
-            string storeLocation = @"C:\Users\ergis gjergji\Desktop\Test3.xls";
+            string storeLocation = @"C:\Users\ergis\Desktop\Test3.xls";
 
-            List<Model_2> data = new List<Model_2>
+            List<TemplateModel> data = new List<TemplateModel>
             {
-                new Model_2() { Prop_1 = 1, Prop_2 = "Test", Prop_3 = false, Prop_4 = DateTime.Now, Prop_5 = 0.35f },
-                new Model_2() { Prop_1 = 2, Prop_3 = false, Prop_4 = DateTime.Now.AddDays(-3), Prop_5 = 2.12f },
+                new TemplateModel() { Prop_1 = 1, Prop_2 = "Test", Prop_3 = false, Prop_4 = DateTime.Now, Prop_5 = 0.35f },
+                new TemplateModel() { Prop_1 = 2, Prop_3 = false, Prop_4 = DateTime.Now.AddDays(-3), Prop_5 = 2.12f },
             };
 
             Dictionary<string, Position> map1 = new Dictionary<string, Position>();
-            map1.Add(nameof(Model_2.Prop_1), new Position { RowIndex = 1, ColumnLetter = "A" });
-            map1.Add(nameof(Model_2.Prop_2), new Position { RowIndex = 2, ColumnLetter = "B" });
-            map1.Add(nameof(Model_2.Prop_3), new Position { RowIndex = 4, ColumnLetter = "C" });
-            map1.Add(nameof(Model_2.Prop_4), new Position { RowIndex = 3, ColumnLetter = "D" });
-            map1.Add(nameof(Model_2.Prop_5), new Position { RowIndex = 1, ColumnLetter = "E" });
+            map1.Add(nameof(TemplateModel.Prop_1), new Position { RowIndex = 1, ColumnLetter = "A" });
+            map1.Add(nameof(TemplateModel.Prop_2), new Position { RowIndex = 2, ColumnLetter = "B" });
+            map1.Add(nameof(TemplateModel.Prop_3), new Position { RowIndex = 4, ColumnLetter = "C" });
+            map1.Add(nameof(TemplateModel.Prop_4), new Position { RowIndex = 3, ColumnLetter = "D" });
+            map1.Add(nameof(TemplateModel.Prop_5), new Position { RowIndex = 1, ColumnLetter = "E" });
 
             data[0].PositionMap = map1;
 
             Dictionary<string, Position> map2 = new Dictionary<string, Position>();
-            map2.Add(nameof(Model_2.Prop_1), new Position { RowIndex = 5, ColumnLetter = "B" });
-            map2.Add(nameof(Model_2.Prop_2), new Position { RowIndex = 6, ColumnLetter = "A" });
-            map2.Add(nameof(Model_2.Prop_3), new Position { RowIndex = 8, ColumnLetter = "C" });
-            map2.Add(nameof(Model_2.Prop_4), new Position { RowIndex = 7, ColumnLetter = "D" });
-            map2.Add(nameof(Model_2.Prop_5), new Position { RowIndex = 6, ColumnLetter = "E" });
+            map2.Add(nameof(TemplateModel.Prop_1), new Position { RowIndex = 5, ColumnLetter = "B" });
+            map2.Add(nameof(TemplateModel.Prop_2), new Position { RowIndex = 6, ColumnLetter = "A" });
+            map2.Add(nameof(TemplateModel.Prop_3), new Position { RowIndex = 8, ColumnLetter = "C" });
+            map2.Add(nameof(TemplateModel.Prop_4), new Position { RowIndex = 7, ColumnLetter = "D" });
+            map2.Add(nameof(TemplateModel.Prop_5), new Position { RowIndex = 6, ColumnLetter = "E" });
 
             data[1].PositionMap = map2;
 
@@ -109,6 +114,14 @@ namespace Examples
             {
                 fileStream.Write(content, 0, content.Length);
             }
+        }
+
+        public static void Test_Read()
+        {
+            string location = @"C:\Users\ergis\Desktop\Test_read.xls";
+            string sheetName = "Sheet1";
+
+            var data = ExcelManager.ReadFromExcel<Customer>(location, sheetName, 1);
         }
     }
 }

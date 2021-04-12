@@ -1,5 +1,4 @@
-﻿using NLog;
-using NPOI.HSSF.UserModel;
+﻿using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using Npoi_Library.Excel.Configurations;
@@ -19,7 +18,7 @@ namespace Npoi_Library.Excel
     public static class ExcelManager
     {
         #region Variables
-        private static readonly ILogger logger = LogManager.GetCurrentClassLogger();
+        //private static readonly ILogger logger = LogManager.GetCurrentClassLogger();
         private static Type type;
         private static HSSFWorkbook workbook;
         private static ISheet Sheet;
@@ -48,8 +47,8 @@ namespace Npoi_Library.Excel
             if (dataList == null)
                 throw new ArgumentNullException(nameof(dataList));
 
-            if (dataList.Count() == 0)
-                logger.Log(LogLevel.Warn, "ExcelManager.GenerateExcel<T> | Data is empty.");
+            //if (dataList.Count() == 0)
+                //logger.Log(LogLevel.Warn, "ExcelManager.GenerateExcel<T> | Data is empty.");
 
             try
             {
@@ -116,7 +115,7 @@ namespace Npoi_Library.Excel
             }
             catch (Exception e)
             {
-                logger.Error("Error at: ExcelManager.GenerateExcel<T> | " + e.Message);
+                //logger.Error("Error at: ExcelManager.GenerateExcel<T> | " + e.Message);
                 throw new ApplicationException("Error at: ExcelManager.<T> | " + e.Message);
             }
             finally
@@ -135,8 +134,8 @@ namespace Npoi_Library.Excel
             if (table == null)
                 throw new ArgumentNullException(nameof(table));
 
-            if (table.Columns.Count == 0 || table.Rows.Count == 0)
-                logger.Log(LogLevel.Warn, "ExcelManager.GenerateExcel<DataTable> | Data is empty.");
+            //if (table.Columns.Count == 0 || table.Rows.Count == 0)
+            //    logger.Log(LogLevel.Warn, "ExcelManager.GenerateExcel<DataTable> | Data is empty.");
 
             try
             {
@@ -185,7 +184,7 @@ namespace Npoi_Library.Excel
             }
             catch (Exception e)
             {
-                logger.Error("Error at: ExcelManager.GenerateExcel<DataTable> | " + e.Message);
+                //logger.Error("Error at: ExcelManager.GenerateExcel<DataTable> | " + e.Message);
                 throw new ApplicationException("Error at: ExcelManager.GenerateExcel<DataTable> | " + e.Message);
             }
             finally
@@ -263,7 +262,7 @@ namespace Npoi_Library.Excel
             }
             catch (Exception e)
             {
-                logger.Error("Error at: ExcelManager.GenerateExcelFromTemplate | " + e.Message);
+                //logger.Error("Error at: ExcelManager.GenerateExcelFromTemplate | " + e.Message);
                 throw new ApplicationException("Error at: ExcelManager.GenerateExcelFromTemplate | " + e.Message);
             }
             finally
@@ -307,8 +306,8 @@ namespace Npoi_Library.Excel
                     if (Sheet == null)
                         throw new ArgumentNullException(nameof(Sheet));
 
-                    if (dataList.Count() == 0)
-                        logger.Log(LogLevel.Warn, "ExcelManager.GenerateExcel | Data is empty.");
+                    //if (dataList.Count() == 0)
+                    //    logger.Log(LogLevel.Warn, "ExcelManager.GenerateExcel | Data is empty.");
 
                     foreach (var item in dataList)
                     {
@@ -348,7 +347,7 @@ namespace Npoi_Library.Excel
             }
             catch (Exception e)
             {
-                logger.Error("Error at: ExcelManager.GenerateExcelFromTemplate | " + e.Message);
+                //logger.Error("Error at: ExcelManager.GenerateExcelFromTemplate | " + e.Message);
                 throw new ApplicationException("Error at: ExcelManager.GenerateExcelFromTemplate | " + e.Message);
             }
             finally
@@ -393,8 +392,8 @@ namespace Npoi_Library.Excel
                     if (Sheet == null)
                         throw new ArgumentNullException(nameof(Sheet));
 
-                    if (dataList.Count() == 0)
-                        logger.Log(LogLevel.Warn, "ExcelManager.GenerateExcel | Data is empty.");
+                    //if (dataList.Count() == 0)
+                    //    logger.Log(LogLevel.Warn, "ExcelManager.GenerateExcel | Data is empty.");
 
                     foreach (var item in dataList)
                     {
@@ -437,7 +436,7 @@ namespace Npoi_Library.Excel
             }
             catch (Exception e)
             {
-                logger.Error("Error at: ExcelManager.GenerateExcelFromTemplate | " + e.Message);
+                //logger.Error("Error at: ExcelManager.GenerateExcelFromTemplate | " + e.Message);
                 throw new ApplicationException("Error at: ExcelManager.GenerateExcelFromTemplate | " + e.Message);
             }
             finally
@@ -483,8 +482,8 @@ namespace Npoi_Library.Excel
                     if (Sheet == null)
                         throw new ArgumentNullException(nameof(Sheet));
 
-                    if (dataList.Count() == 0)
-                        logger.Log(LogLevel.Warn, "ExcelManager.GenerateExcel | Data is empty.");
+                    //if (dataList.Count() == 0)
+                    //    logger.Log(LogLevel.Warn, "ExcelManager.GenerateExcel | Data is empty.");
 
                     foreach (var item in dataList)
                     {
@@ -530,7 +529,7 @@ namespace Npoi_Library.Excel
             }
             catch (Exception e)
             {
-                logger.Error("Error at: ExcelManager.GenerateExcelFromTemplate | " + e.Message);
+                //logger.Error("Error at: ExcelManager.GenerateExcelFromTemplate | " + e.Message);
                 throw new ApplicationException("Error at: ExcelManager.GenerateExcelFromTemplate | " + e.Message);
             }
             finally
@@ -577,8 +576,8 @@ namespace Npoi_Library.Excel
                     if (Sheet == null)
                         throw new ArgumentNullException(nameof(Sheet));
 
-                    if (dataList.Count() == 0)
-                        logger.Log(LogLevel.Warn, "ExcelManager.GenerateExcel | Data is empty.");
+                    //if (dataList.Count() == 0)
+                    //    logger.Log(LogLevel.Warn, "ExcelManager.GenerateExcel | Data is empty.");
 
                     foreach (var item in dataList)
                     {
@@ -625,13 +624,92 @@ namespace Npoi_Library.Excel
             }
             catch (Exception e)
             {
-                logger.Error("Error at: ExcelManager.GenerateExcelFromTemplate | " + e.Message);
+                //logger.Error("Error at: ExcelManager.GenerateExcelFromTemplate | " + e.Message);
                 throw new ApplicationException("Error at: ExcelManager.GenerateExcelFromTemplate | " + e.Message);
             }
             finally
             {
                 ReleaseMemory();
             }
+        }
+
+        public static IEnumerable<T> ReadFromExcel<T>(string location, string sheet, int rowIndex) where T : class
+        {
+            if (location == null)
+                throw new ArgumentNullException(nameof(location));
+
+            if (string.IsNullOrWhiteSpace(sheet))
+                throw new ArgumentNullException(nameof(sheet));
+
+            try
+            {
+                using (var file = new FileStream(location, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                {
+                    workbook = new HSSFWorkbook(file);
+                    if (workbook == null)
+                        throw new ArgumentNullException(nameof(workbook));
+
+                    Sheet = workbook.GetSheet(sheet);
+                    if (Sheet == null)
+                        throw new ArgumentNullException(nameof(Sheet));
+
+                    type = typeof(T);
+                    PropertyInfo[] properties;
+                    if (type.GetInterfaces().Contains(typeof(IPositionable)))
+                        properties = type.GetProperties().Where(p => !p.Name.Equals("PositionMap")).ToArray();
+                    else
+                        properties = type.GetProperties();
+
+                    if (!properties.Any())
+                        return null;
+
+                    if (!PropertiesValid(properties))
+                        throw new Exception($"{type.Name}: not all properties implement attribute {nameof(ExcelConfig)}");
+
+                    var configList = GetPropertyConfigurationList(properties);
+
+                    var dataList = new List<T>();
+                    while (true)
+                    {
+                        if (IsRowEmpty(rowIndex, configList))
+                            break;
+
+                        var row = Sheet.GetRow(rowIndex);
+                        T instance = (T)Activator.CreateInstance(type);
+
+                        foreach (var propConfig in configList)
+                        {
+                            var propType = type.GetProperty(propConfig.PropertyName).PropertyType;
+
+                            var cell = row.GetCell(propConfig.ColumnPosition - 1); // 0-based indexing
+                            if(cell != null && cell.CellType != CellType.Blank)
+                            {
+                                var value = Convert.ChangeType(ReadCellValue(cell), Nullable.GetUnderlyingType(propType) ?? propType);
+                                type.GetProperty(propConfig.PropertyName).SetValue(instance, value, null);
+                            }
+                        }
+
+                        dataList.Add(instance);
+                        rowIndex++;
+                    }
+
+                    return dataList;
+                }
+            }
+            catch (Exception e)
+            {
+                //logger.Error("Error at: ExcelManager.GenerateExcelFromTemplate | " + e.Message);
+                throw new ApplicationException("Error at: ExcelManager.ReadFromExcel | " + e.Message);
+            }
+            finally
+            {
+                ReleaseMemory();
+            }
+        }
+
+        public static IEnumerable<T> ReadFromExcel<T>(string location, string sheet) where T : class
+        {
+            return ReadFromExcel<T>(location, sheet, 0);
         }
 
         #region  ---------------------------------------------------- Private methods -----------------------------------------------------------
@@ -794,7 +872,7 @@ namespace Npoi_Library.Excel
             {
                 // Means there are many properties with same column position
                 string errorMessage = $"Object `{type.ToString()}` cannot have field with negative ColumnPosition.";
-                logger.Error(errorMessage);
+                //logger.Error(errorMessage);
                 throw new ApplicationException(errorMessage);
             }
 
@@ -806,9 +884,56 @@ namespace Npoi_Library.Excel
                 {
                     // Means there are many properties with same column position
                     string errorMessage = $"Object `{type.ToString()}` cannot have more than 1 field with ColumnPosition = {config.ColumnPosition}";
-                    logger.Error(errorMessage);
+                    //logger.Error(errorMessage);
                     throw new ApplicationException(errorMessage);
                 }
+            }
+        }
+
+        private static List<PropertyConfig> GetPropertyConfigurationList(PropertyInfo[] properties)
+        {
+            try
+            {
+                List<PropertyConfig> configList = new List<PropertyConfig>();
+
+                for (int i = 0; i < properties.Length; i++)
+                {
+                    Type propType = properties[i].GetType();
+
+                    PropertyConfig config = new PropertyConfig();
+                    config.PropertyName = properties[i].Name;
+
+                    var attr = properties[i].GetCustomAttribute<ExcelConfig>();
+                    if (attr != null)
+                    {
+                        config.ColumnPosition = attr.ColumnPosition;
+
+                        if (attr.HeaderName != null)
+                            config.HeaderName = attr.HeaderName;
+                        else
+                            config.HeaderName = properties[i].Name;
+
+                        if (attr.DataFormat != null)
+                            config.DataFormat = attr.DataFormat;
+                        else
+                            config.DataFormat = GetTypeDefaultFormat(properties[i].PropertyType);
+                    }
+                    else
+                    {
+                        config.HeaderName = config.PropertyName;
+                        config.ColumnPosition = 0;
+                        config.DataFormat = GetTypeDefaultFormat(properties[i].PropertyType);
+                    }
+
+                    configList.Add(config);
+                }
+
+                return configList;
+            }
+            catch (Exception e)
+            {
+                //logger.Log(LogLevel.Error, "Error at: ExcelManager.GetPropertyConfigurationList | " + e.Message);
+                throw new ApplicationException("Error at: ExcelManager.GetPropertyConfigurationList | " + e.Message);
             }
         }
 
@@ -869,7 +994,7 @@ namespace Npoi_Library.Excel
             }
             catch (Exception e)
             {
-                logger.Log(LogLevel.Error, "Error at: ExcelManager.GetPropertyConfigurationList | " + e.Message);
+                //logger.Log(LogLevel.Error, "Error at: ExcelManager.GetPropertyConfigurationList | " + e.Message);
                 throw new ApplicationException("Error at: ExcelManager.GetPropertyConfigurationList | " + e.Message);
             }
         }
@@ -913,6 +1038,30 @@ namespace Npoi_Library.Excel
             {
                 throw new ApplicationException("Error at: ExcelManager.GetDataColumnConfigurationList | " + e.Message);
             }
+        }
+
+        private static bool PropertiesValid(PropertyInfo[] properties)
+        {
+            if (properties.Any(p => p.GetCustomAttribute<ExcelConfig>() is null))
+                return false;
+            return true;
+        }
+
+        private static bool IsRowEmpty(int rowIndex, IList<PropertyConfig> configList)
+        {
+            var row = Sheet.GetRow(rowIndex);
+            if (row is null)
+                return true;
+
+            foreach(var config in configList)
+            {
+                var cell = row.GetCell(config.ColumnPosition);
+                if (cell != null && cell.CellType != CellType.Blank)
+                    return false;
+                else
+                    continue;
+            }
+            return true;
         }
 
         private static void GenerateHeaders(List<PropertyConfig> configList, IRow HeaderRow, HSSFCellStyle headerCellStyle)
@@ -976,7 +1125,37 @@ namespace Npoi_Library.Excel
             }
             catch (Exception e)
             {
-                logger.Error("Error at: ExcelManager.PrintCellValue | " + e.Message);
+                //logger.Error("Error at: ExcelManager.PrintCellValue | " + e.Message);
+                throw new ApplicationException("Error at: ExcelManager.PrintCellValue | " + e.Message);
+            }
+        }
+
+        private static object ReadCellValue(ICell cell)
+        {
+            try
+            {
+                if (cell == null)
+                    return null;
+
+                var cellType = cell.CellType; 
+
+                if (cellType == CellType.String)
+                    return cell.StringCellValue;
+
+                if (cellType == CellType.Boolean)
+                    return cell.BooleanCellValue;
+
+                if (HSSFDateUtil.IsCellDateFormatted(cell))
+                    return cell.DateCellValue;
+
+                if (cellType == CellType.Numeric)
+                    return cell.NumericCellValue;
+
+                return cell.StringCellValue;
+            }
+            catch (Exception e)
+            {
+                //logger.Error("Error at: ExcelManager.PrintCellValue | " + e.Message);
                 throw new ApplicationException("Error at: ExcelManager.PrintCellValue | " + e.Message);
             }
         }

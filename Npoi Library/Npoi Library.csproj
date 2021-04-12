@@ -3,10 +3,10 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Npoi_Library</RootNamespace>
+    <UserSecretsId>4a228eac-b0ed-4c13-8e0b-7d6df45c12b1</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NLog" Version="4.7.9" />
     <PackageReference Include="NPOI" Version="2.5.2" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
   </ItemGroup>

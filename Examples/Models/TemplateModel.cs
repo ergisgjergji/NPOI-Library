@@ -2,9 +2,9 @@
 using System;
 using System.Collections.Generic;
 
-namespace Examples
+namespace Examples.Models
 {
-    public class Model_2 : IPositionable
+    public class TemplateModel : IPositionable
     {
         public int Prop_1 { get; set; }
         public string Prop_2 { get; set; }
