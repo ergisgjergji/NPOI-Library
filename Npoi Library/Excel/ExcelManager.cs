@@ -1,4 +1,5 @@
-﻿using NPOI.HSSF.UserModel;
+﻿using Microsoft.Extensions.Logging;
+using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using Npoi_Library.Excel.Configurations;
@@ -15,10 +16,17 @@ using System.Reflection;
 
 namespace Npoi_Library.Excel
 {
-    public static class ExcelManager
+    public enum ColorIndex
     {
-        #region Variables
-        //private static readonly ILogger logger = LogManager.GetCurrentClassLogger();
+        HeaderFontColor = 56,
+        HeaderBgColor = 57,
+        BodyFontColor = 58,
+        BodyBgColor = 59,
+        HighlightColor = 60
+    }
+
+    public class ExcelManager
+    {
         private static Type type;
         private static HSSFWorkbook workbook;
         private static ISheet Sheet;
@@ -26,15 +34,12 @@ namespace Npoi_Library.Excel
         private static HSSFCellStyle headerCellStyle;
         private static ICellStyle bodyCellStyle;
         private static ICellStyle emptyCellStyle;
-        #endregion
 
-        enum ColorIndex
+        private readonly ILogger<ExcelManager> _logger;
+
+        public ExcelManager(ILogger<ExcelManager> logger = null)
         {
-            HeaderFontColor = 56,
-            HeaderBgColor = 57,
-            BodyFontColor = 58,
-            BodyBgColor = 59,
-            HighlightColor = 60
+            _logger = logger;
         }
 
         /// <summary>
@@ -42,13 +47,13 @@ namespace Npoi_Library.Excel
         /// </summary>
         /// <param name="dataList"> A collection of type T. </param>
         /// <param name="options"> (optional) Configurable options, like: HeaderStyle, BodyStyle </param>
-        public static byte[] GenerateExcel<T>(IEnumerable<T> dataList, ExcelOptions options) where T : class
+        public byte[] GenerateExcel<T>(IEnumerable<T> dataList, ExcelOptions options) where T : class
         {
             if (dataList == null)
                 throw new ArgumentNullException(nameof(dataList));
 
-            //if (dataList.Count() == 0)
-                //logger.Log(LogLevel.Warn, "ExcelManager.GenerateExcel<T> | Data is empty.");
+            if (dataList.Count() == 0)
+                _logger?.LogWarning("ExcelManager.GenerateExcel<T> | Data is empty.");
 
             try
             {
@@ -115,7 +120,7 @@ namespace Npoi_Library.Excel
             }
             catch (Exception e)
             {
-                //logger.Error("Error at: ExcelManager.GenerateExcel<T> | " + e.Message);
+                _logger?.LogError("Error at: ExcelManager.GenerateExcel<T> | " + e.Message);
                 throw new ApplicationException("Error at: ExcelManager.<T> | " + e.Message);
             }
             finally
@@ -129,13 +134,13 @@ namespace Npoi_Library.Excel
         /// </summary>
         /// <param name="table"> DataTable. </param>
         /// <param name="options"> (optional) Configurable options, like: HeaderStyle, BodyStyle </param>
-        public static byte[] GenerateExcel(DataTable table, ExcelOptions options)
+        public byte[] GenerateExcel(DataTable table, ExcelOptions options)
         {
             if (table == null)
                 throw new ArgumentNullException(nameof(table));
 
-            //if (table.Columns.Count == 0 || table.Rows.Count == 0)
-            //    logger.Log(LogLevel.Warn, "ExcelManager.GenerateExcel<DataTable> | Data is empty.");
+            if (table.Columns.Count == 0 || table.Rows.Count == 0)
+                _logger?.LogWarning("ExcelManager.GenerateExcel<DataTable> | Data is empty.");
 
             try
             {
@@ -184,7 +189,7 @@ namespace Npoi_Library.Excel
             }
             catch (Exception e)
             {
-                //logger.Error("Error at: ExcelManager.GenerateExcel<DataTable> | " + e.Message);
+                _logger?.LogError("Error at: ExcelManager.GenerateExcel<DataTable> | " + e.Message);
                 throw new ApplicationException("Error at: ExcelManager.GenerateExcel<DataTable> | " + e.Message);
             }
             finally
@@ -200,7 +205,7 @@ namespace Npoi_Library.Excel
         /// <param name="data"> An object of type T. </param>
         /// <param name="templateLocation"> Absolute path of the template file. </param>
         /// <param name="tempSheetName"> Sheet name of the template file. </param>
-        public static byte[] GenerateExcelFromTemplate<T>(T data, string templateLocation, string tempSheetName) where T : IPositionable
+        public byte[] GenerateExcelFromTemplate<T>(T data, string templateLocation, string tempSheetName) where T : IPositionable
         {
             if (data == null)
                 throw new ArgumentNullException(nameof(data));
@@ -262,7 +267,7 @@ namespace Npoi_Library.Excel
             }
             catch (Exception e)
             {
-                //logger.Error("Error at: ExcelManager.GenerateExcelFromTemplate | " + e.Message);
+                _logger?.LogError("Error at: ExcelManager.GenerateExcelFromTemplate | " + e.Message);
                 throw new ApplicationException("Error at: ExcelManager.GenerateExcelFromTemplate | " + e.Message);
             }
             finally
@@ -278,7 +283,7 @@ namespace Npoi_Library.Excel
         /// <param name="dataList"> A collection of type T. </param>
         /// <param name="templateLocation"> Absolute path of the template file. </param>
         /// <param name="tempSheetName"> Sheet name of the template file. </param>
-        public static byte[] GenerateExcelFromTemplate<T>(IEnumerable<T> dataList, string templateLocation, string tempSheetName) where T : IPositionable
+        public byte[] GenerateExcelFromTemplate<T>(IEnumerable<T> dataList, string templateLocation, string tempSheetName) where T : IPositionable
         {
             if (dataList == null)
                 throw new ArgumentNullException(nameof(dataList));
@@ -306,8 +311,8 @@ namespace Npoi_Library.Excel
                     if (Sheet == null)
                         throw new ArgumentNullException(nameof(Sheet));
 
-                    //if (dataList.Count() == 0)
-                    //    logger.Log(LogLevel.Warn, "ExcelManager.GenerateExcel | Data is empty.");
+                    if (dataList.Count() == 0)
+                        _logger?.LogWarning("ExcelManager.GenerateExcel | Data is empty.");
 
                     foreach (var item in dataList)
                     {
@@ -347,7 +352,7 @@ namespace Npoi_Library.Excel
             }
             catch (Exception e)
             {
-                //logger.Error("Error at: ExcelManager.GenerateExcelFromTemplate | " + e.Message);
+                _logger?.LogError("Error at: ExcelManager.GenerateExcelFromTemplate | " + e.Message);
                 throw new ApplicationException("Error at: ExcelManager.GenerateExcelFromTemplate | " + e.Message);
             }
             finally
@@ -364,7 +369,7 @@ namespace Npoi_Library.Excel
         /// <param name="templateLocation"> Absolute path of the template file. </param>
         /// <param name="tempSheetName"> Sheet name of the template file. </param>
         /// <param name="dataSection"> Specifies the section where the table of data lives. </param>
-        public static byte[] GenerateExcelFromTemplate<T>(IEnumerable<T> dataList, string templateLocation, string tempSheetName, ExcelTemplateDataSection dataSection) where T : IPositionable
+        public byte[] GenerateExcelFromTemplate<T>(IEnumerable<T> dataList, string templateLocation, string tempSheetName, ExcelTemplateDataSection dataSection) where T : IPositionable
         {
             if (dataList == null)
                 throw new ArgumentNullException(nameof(dataList));
@@ -392,8 +397,8 @@ namespace Npoi_Library.Excel
                     if (Sheet == null)
                         throw new ArgumentNullException(nameof(Sheet));
 
-                    //if (dataList.Count() == 0)
-                    //    logger.Log(LogLevel.Warn, "ExcelManager.GenerateExcel | Data is empty.");
+                    if (dataList.Count() == 0)
+                        _logger?.LogWarning("ExcelManager.GenerateExcel | Data is empty.");
 
                     foreach (var item in dataList)
                     {
@@ -436,7 +441,7 @@ namespace Npoi_Library.Excel
             }
             catch (Exception e)
             {
-                //logger.Error("Error at: ExcelManager.GenerateExcelFromTemplate | " + e.Message);
+                _logger?.LogError("Error at: ExcelManager.GenerateExcelFromTemplate | " + e.Message);
                 throw new ApplicationException("Error at: ExcelManager.GenerateExcelFromTemplate | " + e.Message);
             }
             finally
@@ -454,7 +459,7 @@ namespace Npoi_Library.Excel
         /// <param name="tempSheetName"> Sheet name of the template file. </param>
         /// <param name="dataSection"> Specifies the section where the table of data lives. </param>
         /// <param name="footer"> A textbox will be drawn below the data, acting like a footer. </param>
-        public static byte[] GenerateExcelFromTemplate<T>(IEnumerable<T> dataList, string templateLocation, string tempSheetName, ExcelTemplateDataSection dataSection, string footer) where T : IPositionable
+        public byte[] GenerateExcelFromTemplate<T>(IEnumerable<T> dataList, string templateLocation, string tempSheetName, ExcelTemplateDataSection dataSection, string footer) where T : IPositionable
         {
             if (dataList == null)
                 throw new ArgumentNullException(nameof(dataList));
@@ -482,8 +487,8 @@ namespace Npoi_Library.Excel
                     if (Sheet == null)
                         throw new ArgumentNullException(nameof(Sheet));
 
-                    //if (dataList.Count() == 0)
-                    //    logger.Log(LogLevel.Warn, "ExcelManager.GenerateExcel | Data is empty.");
+                    if (dataList.Count() == 0)
+                        _logger?.LogWarning("ExcelManager.GenerateExcel | Data is empty.");
 
                     foreach (var item in dataList)
                     {
@@ -529,7 +534,7 @@ namespace Npoi_Library.Excel
             }
             catch (Exception e)
             {
-                //logger.Error("Error at: ExcelManager.GenerateExcelFromTemplate | " + e.Message);
+                _logger?.LogError("Error at: ExcelManager.GenerateExcelFromTemplate | " + e.Message);
                 throw new ApplicationException("Error at: ExcelManager.GenerateExcelFromTemplate | " + e.Message);
             }
             finally
@@ -548,7 +553,7 @@ namespace Npoi_Library.Excel
         /// <param name="dataSection"> Specifies the section where the table of data lives. </param>
         /// <param name="note"> Inserts a note in a merged-cells section. </param>
         /// <param name="footer"> A textbox will be drawn below the data, acting like a footer. </param>
-        public static byte[] GenerateExcelFromTemplate<T>(IEnumerable<T> dataList, string templateLocation, string tempSheetName, ExcelTemplateDataSection dataSection, ExcelNote note, string footer) where T : IPositionable
+        public byte[] GenerateExcelFromTemplate<T>(IEnumerable<T> dataList, string templateLocation, string tempSheetName, ExcelTemplateDataSection dataSection, ExcelNote note, string footer) where T : IPositionable
         {
             if (dataList == null)
                 throw new ArgumentNullException(nameof(dataList));
@@ -576,8 +581,8 @@ namespace Npoi_Library.Excel
                     if (Sheet == null)
                         throw new ArgumentNullException(nameof(Sheet));
 
-                    //if (dataList.Count() == 0)
-                    //    logger.Log(LogLevel.Warn, "ExcelManager.GenerateExcel | Data is empty.");
+                    if (dataList.Count() == 0)
+                        _logger?.LogWarning("ExcelManager.GenerateExcel | Data is empty.");
 
                     foreach (var item in dataList)
                     {
@@ -624,7 +629,7 @@ namespace Npoi_Library.Excel
             }
             catch (Exception e)
             {
-                //logger.Error("Error at: ExcelManager.GenerateExcelFromTemplate | " + e.Message);
+                _logger?.LogError("Error at: ExcelManager.GenerateExcelFromTemplate | " + e.Message);
                 throw new ApplicationException("Error at: ExcelManager.GenerateExcelFromTemplate | " + e.Message);
             }
             finally
@@ -633,7 +638,7 @@ namespace Npoi_Library.Excel
             }
         }
 
-        public static IEnumerable<T> ReadFromExcel<T>(string location, string sheet, int rowIndex) where T : class
+        public IEnumerable<T> ReadFromExcel<T>(string location, string sheet, int rowIndex) where T : class
         {
             if (location == null)
                 throw new ArgumentNullException(nameof(location));
@@ -698,7 +703,7 @@ namespace Npoi_Library.Excel
             }
             catch (Exception e)
             {
-                //logger.Error("Error at: ExcelManager.GenerateExcelFromTemplate | " + e.Message);
+                _logger?.LogError("Error at: ExcelManager.GenerateExcelFromTemplate | " + e.Message);
                 throw new ApplicationException("Error at: ExcelManager.ReadFromExcel | " + e.Message);
             }
             finally
@@ -707,7 +712,7 @@ namespace Npoi_Library.Excel
             }
         }
 
-        public static IEnumerable<T> ReadFromExcel<T>(string location, string sheet) where T : class
+        public IEnumerable<T> ReadFromExcel<T>(string location, string sheet) where T : class
         {
             return ReadFromExcel<T>(location, sheet, 0);
         }
@@ -717,7 +722,7 @@ namespace Npoi_Library.Excel
         /// <summary>
         /// Configures document summary information
         /// </summary>
-        private static void InitializeDocument(ExcelOptions options)
+        private void InitializeDocument(ExcelOptions options)
         {
             workbook = new HSSFWorkbook();
             if (workbook == null)
@@ -754,7 +759,7 @@ namespace Npoi_Library.Excel
             //workbook.SummaryInformation = si;
         }
 
-        private static void ClearEmptyRows(int x1, int x2, int y1, int y2)
+        private void ClearEmptyRows(int x1, int x2, int y1, int y2)
         {
             if (x1 > x2) throw new ArgumentException($"{nameof(x1)} cannot be greater than {nameof(x2)}");
             if (y1 > y2) throw new ArgumentException($"{nameof(y1)} cannot be greater than {nameof(y2)}");
@@ -796,7 +801,7 @@ namespace Npoi_Library.Excel
         /// <summary>
         /// Prints a note in a merged-cells section (x1, x2, y1, y2)
         /// </summary>
-        private static void DrawNote(ExcelNote note)
+        private void DrawNote(ExcelNote note)
         {
             int startRow = note.x1 - 1;
             int endRow = note.x2 - 1;
@@ -812,7 +817,7 @@ namespace Npoi_Library.Excel
         /// <summary>
         /// Draw a textbox in the end of the file. No need for coordinates, it automatically inserts the footer in the end.
         /// </summary>
-        private static void DrawFooter(string footer)
+        private void DrawFooter(string footer)
         {
             int lastRowIndex = Sheet.LastRowNum;
             // We insert an offset of 5 here, in case there is some static text or data in between
@@ -839,7 +844,7 @@ namespace Npoi_Library.Excel
         /// <summary>
         /// Auto-sorts the properties for which the ColumnPosition is 0
         /// </summary>
-        private static void SortColumnPositions(List<PropertyConfig> configList)
+        private void SortColumnPositions(List<PropertyConfig> configList)
         {
             ValidateColumnPosition(configList);
 
@@ -866,13 +871,13 @@ namespace Npoi_Library.Excel
         /// Checks if there are properties with invalid/duplicate ColumnPosition
         /// </summary>
         /// <param name="configList"></param>
-        private static void ValidateColumnPosition(List<PropertyConfig> configList)
+        private void ValidateColumnPosition(List<PropertyConfig> configList)
         {
             if (configList.Where(c => c.ColumnPosition < 0).Count() > 0)
             {
                 // Means there are many properties with same column position
-                string errorMessage = $"Object `{type.ToString()}` cannot have field with negative ColumnPosition.";
-                //logger.Error(errorMessage);
+                string errorMessage = $"Object `{type}` cannot have field with negative ColumnPosition.";
+                _logger?.LogError(errorMessage);
                 throw new ApplicationException(errorMessage);
             }
 
@@ -883,14 +888,14 @@ namespace Npoi_Library.Excel
                 if (cnt > 1)
                 {
                     // Means there are many properties with same column position
-                    string errorMessage = $"Object `{type.ToString()}` cannot have more than 1 field with ColumnPosition = {config.ColumnPosition}";
-                    //logger.Error(errorMessage);
+                    string errorMessage = $"Object `{type}` cannot have more than 1 field with ColumnPosition = {config.ColumnPosition}";
+                    _logger?.LogError(errorMessage);
                     throw new ApplicationException(errorMessage);
                 }
             }
         }
 
-        private static List<PropertyConfig> GetPropertyConfigurationList(PropertyInfo[] properties)
+        private List<PropertyConfig> GetPropertyConfigurationList(PropertyInfo[] properties)
         {
             try
             {
@@ -932,12 +937,12 @@ namespace Npoi_Library.Excel
             }
             catch (Exception e)
             {
-                //logger.Log(LogLevel.Error, "Error at: ExcelManager.GetPropertyConfigurationList | " + e.Message);
+                _logger?.LogError("Error at: ExcelManager.GetPropertyConfigurationList | " + e.Message);
                 throw new ApplicationException("Error at: ExcelManager.GetPropertyConfigurationList | " + e.Message);
             }
         }
 
-        private static List<PropertyConfig> GetPropertyConfigurationList(PropertyInfo[] properties, ICellStyle style)
+        private List<PropertyConfig> GetPropertyConfigurationList(PropertyInfo[] properties, ICellStyle style)
         {
             try
             {
@@ -994,12 +999,12 @@ namespace Npoi_Library.Excel
             }
             catch (Exception e)
             {
-                //logger.Log(LogLevel.Error, "Error at: ExcelManager.GetPropertyConfigurationList | " + e.Message);
+                _logger?.LogError("Error at: ExcelManager.GetPropertyConfigurationList | " + e.Message);
                 throw new ApplicationException("Error at: ExcelManager.GetPropertyConfigurationList | " + e.Message);
             }
         }
 
-        private static List<PropertyConfig> GetDataColumnConfigurationList(DataColumnCollection columns, ICellStyle style)
+        private List<PropertyConfig> GetDataColumnConfigurationList(DataColumnCollection columns, ICellStyle style)
         {
             try
             {
@@ -1040,14 +1045,14 @@ namespace Npoi_Library.Excel
             }
         }
 
-        private static bool PropertiesValid(PropertyInfo[] properties)
+        private bool PropertiesValid(PropertyInfo[] properties)
         {
             if (properties.Any(p => p.GetCustomAttribute<ExcelConfig>() is null))
                 return false;
             return true;
         }
 
-        private static bool IsRowEmpty(int rowIndex, IList<PropertyConfig> configList)
+        private bool IsRowEmpty(int rowIndex, IList<PropertyConfig> configList)
         {
             var row = Sheet.GetRow(rowIndex);
             if (row is null)
@@ -1064,7 +1069,7 @@ namespace Npoi_Library.Excel
             return true;
         }
 
-        private static void GenerateHeaders(List<PropertyConfig> configList, IRow HeaderRow, HSSFCellStyle headerCellStyle)
+        private void GenerateHeaders(List<PropertyConfig> configList, IRow HeaderRow, HSSFCellStyle headerCellStyle)
         {
             int i = 0;
             foreach (var config in configList)
@@ -1077,7 +1082,7 @@ namespace Npoi_Library.Excel
             }
         }
 
-        private static void AutoSizeSheet(ISheet Sheet)
+        private void AutoSizeSheet(ISheet Sheet)
         {
             int lastCell = Sheet.GetRow(0).LastCellNum;
             for (int i = 0; i <= lastCell; i++)
@@ -1091,7 +1096,7 @@ namespace Npoi_Library.Excel
         /// </summary>
         /// <param name="Cell">The cell to which you are setting the value.</param>
         /// <param name="value">Types: int, float, bool, string, DateTime, Guid etc. (Also supports nullable types)</param>
-        private static void PrintCellValue(ICell Cell, object value)
+        private void PrintCellValue(ICell Cell, object value)
         {
             try
             {
@@ -1125,12 +1130,12 @@ namespace Npoi_Library.Excel
             }
             catch (Exception e)
             {
-                //logger.Error("Error at: ExcelManager.PrintCellValue | " + e.Message);
+                _logger?.LogError("Error at: ExcelManager.PrintCellValue | " + e.Message);
                 throw new ApplicationException("Error at: ExcelManager.PrintCellValue | " + e.Message);
             }
         }
 
-        private static object ReadCellValue(ICell cell)
+        private object ReadCellValue(ICell cell)
         {
             try
             {
@@ -1155,12 +1160,12 @@ namespace Npoi_Library.Excel
             }
             catch (Exception e)
             {
-                //logger.Error("Error at: ExcelManager.PrintCellValue | " + e.Message);
+                _logger?.LogError("Error at: ExcelManager.PrintCellValue | " + e.Message);
                 throw new ApplicationException("Error at: ExcelManager.PrintCellValue | " + e.Message);
             }
         }
 
-        private static string GetTypeDefaultFormat(Type t)
+        private string GetTypeDefaultFormat(Type t)
         {
             if (t.Equals(typeof(string)) || t.Equals(typeof(Guid)) || t.Equals(typeof(Guid?)))
                 return null;
@@ -1180,7 +1185,7 @@ namespace Npoi_Library.Excel
             return null;
         }
 
-        private static void ReleaseMemory()
+        private void ReleaseMemory()
         {
             type = null;
             workbook = null;
@@ -1193,7 +1198,7 @@ namespace Npoi_Library.Excel
 
         #region Style configurators
 
-        private static ICellStyle GetHeaderStyle(HeaderStyle styleConfig)
+        private ICellStyle GetHeaderStyle(HeaderStyle styleConfig)
         {
             ICellStyle headerCellStyle = workbook.CreateCellStyle();
             HSSFPalette palette = workbook.GetCustomPalette();
@@ -1243,7 +1248,7 @@ namespace Npoi_Library.Excel
             return headerCellStyle;
         }
 
-        private static ICellStyle GetDefaultHeaderStyle()
+        private ICellStyle GetDefaultHeaderStyle()
         {
             ICellStyle headerCellStyle = workbook.CreateCellStyle();
             HSSFPalette palette = workbook.GetCustomPalette();
@@ -1274,7 +1279,7 @@ namespace Npoi_Library.Excel
             return headerCellStyle;
         }
 
-        private static ICellStyle GetBodyStyle(BodyStyle styleConfig)
+        private ICellStyle GetBodyStyle(BodyStyle styleConfig)
         {
             ICellStyle bodyCellStyle = workbook.CreateCellStyle();
             HSSFPalette palette = workbook.GetCustomPalette();
@@ -1324,7 +1329,7 @@ namespace Npoi_Library.Excel
             return bodyCellStyle;
         }
 
-        private static ICellStyle GetDefaultBodyStyle()
+        private ICellStyle GetDefaultBodyStyle()
         {
             ICellStyle bodyCellStyle = workbook.CreateCellStyle();
             HSSFPalette palette = workbook.GetCustomPalette();
@@ -1342,7 +1347,7 @@ namespace Npoi_Library.Excel
             return bodyCellStyle;
         }
 
-        private static ICellStyle GetEmptyStyle()
+        private ICellStyle GetEmptyStyle()
         {
             ICellStyle emptyCellStyle = workbook.CreateCellStyle();
             HSSFPalette palette = workbook.GetCustomPalette();

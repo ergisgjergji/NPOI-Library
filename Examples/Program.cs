@@ -1,5 +1,4 @@
-﻿
-using Examples.Models;
+﻿using Examples.Models;
 using Npoi_Library.Excel;
 using Npoi_Library.Excel.Configurations;
 using Npoi_Library.Excel.Styling;
@@ -14,10 +13,10 @@ namespace Examples
     {
         static void Main(string[] args)
         {
-            //Test1();
+            Test1();
             //Test2();
             //Test3();
-            Test_Read();
+            //Test_Read();
 
             Console.WriteLine("Tests completed successfully!");
             Console.ReadLine();
@@ -33,7 +32,8 @@ namespace Examples
                 new Customer { Id = 2, Name = "Test", Salary = 800f, BirthDate = DateTime.Now.AddYears(-20), IsActive = false }
             };
 
-            byte[] content = ExcelManager.GenerateExcel(data, new ExcelOptions
+            var eManager = new ExcelManager();
+            byte[] content = eManager.GenerateExcel(data, new ExcelOptions
             {
                 HeaderStyle = new HeaderStyle { IsBold = false },
                 BodyStyle = new BodyStyle { IsBordered = true }
@@ -70,7 +70,8 @@ namespace Examples
             row["IsActive"] = true;
             table.Rows.Add(row);
 
-            byte[] content = ExcelManager.GenerateExcel(table, null);
+            var eManager = new ExcelManager();
+            byte[] content = eManager.GenerateExcel(table, null);
 
             using (var fileStream = File.Create(storeLocation))
             {
@@ -108,7 +109,8 @@ namespace Examples
 
             data[1].PositionMap = map2;
 
-            byte[] content = ExcelManager.GenerateExcelFromTemplate(data, templateLocation, templateSheetName);
+            var eManager = new ExcelManager();
+            byte[] content = eManager.GenerateExcelFromTemplate(data, templateLocation, templateSheetName);
 
             using (var fileStream = File.Create(storeLocation))
             {
@@ -121,7 +123,8 @@ namespace Examples
             string location = @"C:\Users\ergis\Desktop\Test_read.xls";
             string sheetName = "Sheet1";
 
-            var data = ExcelManager.ReadFromExcel<Customer>(location, sheetName, 1);
+            var eManager = new ExcelManager();
+            var data = eManager.ReadFromExcel<Customer>(location, sheetName, 1);
         }
     }
 }
