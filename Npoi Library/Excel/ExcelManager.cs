@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
-using NPOI.XSSF.UserModel;
 using Npoi_Library.Excel.Configurations;
 using Npoi_Library.Excel.CustomAttributes;
 using Npoi_Library.Excel.CustomAttributes.Configurations;
@@ -803,6 +802,9 @@ namespace Npoi_Library.Excel
             var startCol = y1 - 1;
             var endCol = y2 - 1;
 
+            if (realEndRow > Sheet.LastRowNum)
+                realEndRow = Sheet.LastRowNum;
+
             int i = realStartRow;
             while (i < realEndRow)
             {
@@ -829,6 +831,8 @@ namespace Npoi_Library.Excel
                     else
                         i++;
                 }
+                else
+                    break;
             }
         }
 
@@ -842,9 +846,23 @@ namespace Npoi_Library.Excel
             int startCol = note.y1 - 1;
             int endCol = note.y2 - 1;
 
-            var cell = Sheet.GetRow(startRow).GetCell(startCol);
-            cell.SetCellValue(new XSSFRichTextString(note.Text));
+            var noteStartRow = Sheet.GetRow(startRow);
+            if (noteStartRow == null)
+                noteStartRow = Sheet.CreateRow(startRow);
 
+            var noteStartCell = noteStartRow.GetCell(startCol);
+            if (noteStartCell == null)
+                noteStartCell = noteStartRow.CreateCell(startCol);
+
+            var noteEndRow = Sheet.GetRow(endRow);
+            if (noteEndRow == null)
+                Sheet.CreateRow(endRow);
+
+            var noteEndCell = noteStartRow.GetCell(endCol);
+            if (noteEndCell == null)
+                noteStartRow.CreateCell(endCol);
+
+            noteStartCell.SetCellValue(new HSSFRichTextString(note.Text));
             Sheet.AddMergedRegion(new NPOI.SS.Util.CellRangeAddress(startRow, endRow, startCol, endCol));
         }
 
