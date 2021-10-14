@@ -23,7 +23,7 @@ using Sp = Spire.Xls;
         This package is used for converting Excel files to other formats (PDF, Html etc.)
  */
 
-namespace Npoi_Library.Excel
+namespace Npoi_Library.Excel.XlsManager
 {
     public enum ColorIndex
     {
@@ -34,7 +34,7 @@ namespace Npoi_Library.Excel
         HighlightColor = 60
     }
 
-    public class ExcelManager
+    public class XlsManager
     {
         private static Type type;
         private static HSSFWorkbook workbook;
@@ -44,9 +44,9 @@ namespace Npoi_Library.Excel
         private static ICellStyle bodyCellStyle;
         private static ICellStyle emptyCellStyle;
 
-        private readonly ILogger<ExcelManager> _logger;
+        private readonly ILogger<XlsManager> _logger;
 
-        public ExcelManager(ILogger<ExcelManager> logger = null)
+        public XlsManager(ILogger<XlsManager> logger = null)
         {
             _logger = logger;
         }
