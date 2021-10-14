@@ -21,5 +21,16 @@ namespace Examples.Models
 
         [ExcelConfig(ColumnPosition = 5)]
         public bool IsActive { get; set; }
+
+        // Extra, dummy properties
+        public string Prop_1 { get; set; } = "Lorem ipsum ...";
+
+        public bool Prop_2 { get; set; }
+
+        public int Prop_3 { get; set; } = 123213;
+
+        public bool Prop_4 { get; set; } = true;
+
+        public string Prop_5 { get; set; } = "ASDASDASDSADSA";
     }
 }

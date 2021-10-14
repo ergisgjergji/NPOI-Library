@@ -24,7 +24,8 @@ namespace Examples
 
         private static void Test1()
         {
-            string storeLocation = @"C:\Users\ergis\Desktop\Test1.xls";
+            string xlsLocation = @"C:\Users\ergis\Desktop\Test1.xls";
+            string pdfLocation = @"C:\Users\ergis\Desktop\Test1.pdf";
 
             List<Customer> data = new List<Customer>()
             {
@@ -33,15 +34,20 @@ namespace Examples
             };
 
             var eManager = new ExcelManager();
-            byte[] content = eManager.GenerateExcel(data, new ExcelOptions
+            
+            var xlsContent = eManager.GenerateExcel(data, new ExcelOptions
             {
-                HeaderStyle = new HeaderStyle { IsBold = false },
-                BodyStyle = new BodyStyle { IsBordered = true }
+                HeaderStyle = new HeaderStyle { IsBold = true, IsBordered = true, FontSize = 20, FontFamily = "Arial" },
+                BodyStyle = new BodyStyle { IsBordered = true, FontSize = 14 }
             });
+            
+            var pdfContent = eManager.ConvertExcelToPdf(xlsContent);
 
-            using (var fileStream = File.Create(storeLocation))
+            using (var xlsStream = File.Create(xlsLocation))
+            using (var pdfStream = File.Create(pdfLocation))
             {
-                fileStream.Write(content, 0, content.Length);
+                xlsStream.Write(xlsContent, 0, xlsContent.Length);
+                pdfStream.Write(pdfContent, 0, pdfContent.Length);
             }
         }
 

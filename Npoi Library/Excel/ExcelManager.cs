@@ -14,6 +14,16 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
+using Sp = Spire.Xls;
+
+/*
+    This packagage uses 2 libraries:
+    - NPOI: https://github.com/dotnetcore/NPOI
+        This package is used for working solely with Excel files: generating excel files and/or reading from them.
+    - FreeSpire.XLS: https://www.e-iceblue.com/Introduce/free-xls-component.html
+        This package is used for converting Excel files to other formats (PDF, Html etc.)
+ */
+
 namespace Npoi_Library.Excel
 {
     public enum ColorIndex
@@ -715,6 +725,30 @@ namespace Npoi_Library.Excel
         public IEnumerable<T> ReadFromExcel<T>(string location, string sheet) where T : class
         {
             return ReadFromExcel<T>(location, sheet, 0);
+        }
+
+        public byte[] ConvertExcelToPdf(byte[] xlsBuffer)
+        {
+            if(xlsBuffer is null)
+                throw new ArgumentNullException(nameof(xlsBuffer));
+
+            try
+            {
+                using (var xlsStream = new MemoryStream(xlsBuffer))
+                using (var pdfStream = new MemoryStream())
+                {
+                    var workbook = new Sp.Workbook();
+                    workbook.LoadFromStream(xlsStream);
+
+                    workbook.SaveToStream(pdfStream, Sp.FileFormat.PDF);
+                    return pdfStream.ToArray();
+                }
+            }
+            catch(Exception e)
+            {
+                _logger?.LogError("Error at: ExcelManager.ConvertXLSToPdf | " + e.Message);
+                throw new ApplicationException("Error at: ExcelManager.ConvertXLSToPdf | " + e.Message);
+            }
         }
 
         #region  ---------------------------------------------------- Private methods -----------------------------------------------------------
