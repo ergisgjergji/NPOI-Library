@@ -15,7 +15,7 @@ namespace Examples.Tests
     {
         public static void Test1()
         {
-            string xlsLocation = @"C:\Users\ergis\Desktop\Test1.xlsx";
+            string xlsxLocation = @"C:\Users\ergis\Desktop\Test1.xlsx";
             string pdfLocation = @"C:\Users\ergis\Desktop\Test1.pdf";
 
             List<Customer> data = new List<Customer>()
@@ -34,7 +34,7 @@ namespace Examples.Tests
 
             var pdfContent = eManager.ConvertToPdf(xlsContent);
 
-            using (var xlsStream = File.Create(xlsLocation))
+            using (var xlsStream = File.Create(xlsxLocation))
             using (var pdfStream = File.Create(pdfLocation))
             {
                 xlsStream.Write(xlsContent, 0, xlsContent.Length);

@@ -263,8 +263,7 @@ namespace Npoi_Library.Excel.XlsxManager
                         PrintCellValue(currCell, propValue);
                     }
 
-                    //Force excel to recalculate all the formula while open
-                    Sheet.ForceFormulaRecalculation = true;
+                    WorkbookFinalProcessing();
 
                     using (MemoryStream memoryStream = new MemoryStream())
                     {
@@ -348,8 +347,7 @@ namespace Npoi_Library.Excel.XlsxManager
                         }
                     }
 
-                    Sheet.ForceFormulaRecalculation = true; //Force excel to recalculate all the formula while open
-                    Sheet.TopRow = 0; // Ensures the vertical scroll is in the first page
+                    WorkbookFinalProcessing();
 
                     using (MemoryStream memoryStream = new MemoryStream())
                     {
@@ -437,8 +435,7 @@ namespace Npoi_Library.Excel.XlsxManager
                     // Deletes the empty rows
                     ClearEmptyRows(dataSection.x1, dataSection.x2, dataSection.y1, dataSection.y2);
 
-                    Sheet.ForceFormulaRecalculation = true; //Force excel to recalculate all the formula while open
-                    Sheet.TopRow = 0; // Ensures the vertical scroll is in the first page
+                    WorkbookFinalProcessing();
 
                     using (MemoryStream memoryStream = new MemoryStream())
                     {
@@ -530,8 +527,7 @@ namespace Npoi_Library.Excel.XlsxManager
                     // Insert a footer in the end of the data
                     DrawFooter(footer);
 
-                    Sheet.ForceFormulaRecalculation = true; //Force excel to recalculate all the formula while open
-                    Sheet.TopRow = 0; // Ensures the vertical scroll is in the first page
+                    WorkbookFinalProcessing();
 
                     using (MemoryStream memoryStream = new MemoryStream())
                     {
@@ -625,8 +621,7 @@ namespace Npoi_Library.Excel.XlsxManager
 
                     DrawFooter(footer);
 
-                    Sheet.ForceFormulaRecalculation = true; //Force excel to recalculate all the formula while open
-                    Sheet.TopRow = 0; // Ensures the vertical scroll is in the first page
+                    WorkbookFinalProcessing();
 
                     using (MemoryStream memoryStream = new MemoryStream())
                     {
@@ -1239,6 +1234,15 @@ namespace Npoi_Library.Excel.XlsxManager
                 return null;
 
             return null;
+        }
+
+        private void WorkbookFinalProcessing()
+        {
+            // Force excel to recalculate all the formula while open
+            XSSFFormulaEvaluator.EvaluateAllFormulaCells(workbook);
+            // Ensure the current Sheet is selected and the scroll is on top
+            workbook.SetActiveSheet(workbook.GetSheetIndex(Sheet));
+            Sheet.ActiveCell = NPOI.SS.Util.CellAddress.A1;
         }
 
         private void ReleaseMemory()
